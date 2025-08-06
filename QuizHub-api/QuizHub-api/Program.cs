@@ -1,6 +1,8 @@
 using QuizHub.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using QuizHub_api.Extensions;
+using QuizHub_api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Add Entity Framework
-builder.Services.AddDbContext<QuizHubDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<QuizHubDbContext>(options =>
+//  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Registracija kontrolera i FluentValidation
+
+
+// Add custom services
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -69,9 +77,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "KvizHub API V1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
+        c.RoutePrefix = "swagger"; 
     });
 }
+
+// Add custom middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
