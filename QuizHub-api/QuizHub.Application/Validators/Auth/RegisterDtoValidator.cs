@@ -43,11 +43,11 @@ namespace QuizHub.Application.Validators.Auth
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)")
                 .WithMessage("Password must contain at least one lowercase letter, one uppercase letter, and one digit");
 
-            RuleFor(x => x.ConfirmPassword)
-                .NotEmpty()
-                .WithMessage("Password confirmation is required")
-                .Equal(x => x.Password)
-                .WithMessage("Passwords do not match");
+            //RuleFor(x => x.ConfirmPassword)
+            //    .NotEmpty()
+            //    .WithMessage("Password confirmation is required")
+            //    .Equal(x => x.Password)
+            //    .WithMessage("Passwords do not match");
 
             RuleFor(x => x.ProfileImage)
                 .Must(BeValidImageUrl)

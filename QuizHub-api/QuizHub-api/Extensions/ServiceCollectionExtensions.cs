@@ -32,7 +32,7 @@ namespace QuizHub_api.Extensions
 
             // FluentValidation
             services.AddFluentValidationAutoValidation();
-            //  services.AddFluentValidationClientsideAdapters();
+          
             services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
            // services.AddControllers()
            //.AddFluentValidation(fv =>
@@ -51,9 +51,9 @@ namespace QuizHub_api.Extensions
             // Services
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IPasswordHashService, PasswordHashService>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IAuthService, AuthService>();
-          //  services.AddScoped<IQuizService, QuizService>();
-          //  services.AddScoped<ICategoryService, CategoryService>();
+         
 
             return services;
         }

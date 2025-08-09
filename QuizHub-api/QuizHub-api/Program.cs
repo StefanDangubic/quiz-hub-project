@@ -9,10 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Add Entity Framework
-//builder.Services.AddDbContext<QuizHubDbContext>(options =>
-//  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-// Registracija kontrolera i FluentValidation
 
 
 // Add custom services
@@ -24,7 +20,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

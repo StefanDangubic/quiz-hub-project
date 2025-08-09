@@ -1,0 +1,27 @@
+export class User {
+  constructor(data = {}) {
+    this.id = data.id || 0;
+    this.username = data.username || '';
+    this.email = data.email || '';
+    this.profileImage = data.profileImage || '';
+    this.role = data.role || 'User';
+    this.isActive = data.isActive || true;
+    this.createdAt = data.createdAt || new Date().toISOString();
+  }
+
+  static fromApiResponse(data) {
+    return new User(data);
+  }
+
+  isAdmin() {
+    return this.role === 'Admin';
+  }
+
+  getDisplayName() {
+    return this.username || this.email;
+  }
+
+  getInitials() {
+    return this.username.substring(0, 2).toUpperCase();
+  }
+}
