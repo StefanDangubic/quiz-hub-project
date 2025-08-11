@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using QuizHub_api.Extensions;
 using QuizHub_api.Middleware;
+using QuizHub.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<QuizHubDbContext>();
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    await SeedData.SeedAdminUserAsync(context, configuration);
+}
 
 
 app.Run();

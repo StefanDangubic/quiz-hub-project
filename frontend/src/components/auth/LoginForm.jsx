@@ -48,7 +48,7 @@ export default function LoginForm() {
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 p-8 w-full max-w-md mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-        <p className="text-gray-600 mt-2">Sign in to your KvizHub account</p>
+        <p className="text-gray-600 mt-2">Sign in to your QuizHub account</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

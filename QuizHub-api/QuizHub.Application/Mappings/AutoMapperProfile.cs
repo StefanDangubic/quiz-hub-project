@@ -28,6 +28,11 @@ namespace QuizHub.Application.Mappings
 
             // Category mappings
             CreateMap<Category, CategoryDto>();
+            CreateMap<CreateCategoryDto, Category>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore()) 
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore()) 
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore()) 
+                .ForMember(dest => dest.Quizzes, opt => opt.Ignore()); 
 
             // Quiz mappings
             CreateMap<Quiz, QuizDto>()

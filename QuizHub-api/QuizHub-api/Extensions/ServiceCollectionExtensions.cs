@@ -34,12 +34,7 @@ namespace QuizHub_api.Extensions
             services.AddFluentValidationAutoValidation();
           
             services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
-           // services.AddControllers()
-           //.AddFluentValidation(fv =>
-           //{
-           // fv.RegisterValidatorsFromAssemblyContaining<RegisterDtoValidator>();
-           //  fv.AutomaticValidationEnabled = true;
-           //});
+          
 
             // Repositories
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -53,7 +48,8 @@ namespace QuizHub_api.Extensions
             services.AddScoped<IPasswordHashService, PasswordHashService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IAuthService, AuthService>();
-         
+            services.AddScoped<ICategoryService, CategoryService>();
+
 
             return services;
         }
