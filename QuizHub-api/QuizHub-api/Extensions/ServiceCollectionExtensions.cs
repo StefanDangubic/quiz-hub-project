@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using QuizHub.Application.DTOs.Quiz;
 using QuizHub.Application.Mappings;
 using QuizHub.Application.Services.Implementations;
 using QuizHub.Application.Services.Interfaces;
 using QuizHub.Application.Validators.Auth;
+using QuizHub.Application.Validators.Quiz;
 using QuizHub.Domain.Interfaces;
 using QuizHub.Infrastructure.Data.Context;
 using QuizHub.Infrastructure.Data.Repositories;
@@ -31,10 +33,9 @@ namespace QuizHub_api.Extensions
 
 
             // FluentValidation
-            services.AddFluentValidationAutoValidation();
-          
+             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
-          
+     
 
             // Repositories
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -49,6 +50,7 @@ namespace QuizHub_api.Extensions
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IQuizService, QuizService>();
 
 
             return services;

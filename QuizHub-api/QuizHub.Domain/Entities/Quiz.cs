@@ -11,7 +11,7 @@ namespace QuizHub.Domain.Entities
 {
     public class Quiz : BaseEntity, IAuditableEntity
     {
-        [Required]
+         [Required]
         [MaxLength(200)]
         public string Title { get; set; } = string.Empty;
 
@@ -24,7 +24,7 @@ namespace QuizHub.Domain.Entities
         [Range(1, 300)]
         public int TimeLimit { get; set; } // in minutes
 
-        public bool IsActive { get; set; } = true;
+       public bool IsActive { get; set; } = true;
 
         public int? CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }

@@ -40,15 +40,35 @@ namespace QuizHub.Application.Mappings
                 .ForMember(dest => dest.CreatorUsername, opt => opt.MapFrom(src => src.Creator.Username))
                 .ForMember(dest => dest.QuestionCount, opt => opt.MapFrom(src => src.Questions.Count));
 
+            CreateMap<Quiz, QuizWithQuestionsDto>()
+               .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+               .ForMember(dest => dest.CreatorUsername, opt => opt.MapFrom(src => src.Creator.Username))
+               .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions.OrderBy(q => q.OrderIndex)));
+
             CreateMap<CreateQuizDto, Quiz>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions));
 
+            // Update Quiz mappings
+            CreateMap<UpdateQuizDto, Quiz>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.Creator, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore())
+              //  .ForMember(dest => dest.QuizAttempts, opt => opt.Ignore())
+                .ForMember(dest => dest.Questions, opt => opt.Ignore()); // Questions handled separately
+
             // Question mappings
             CreateMap<Question, QuestionDto>()
                 .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answers));
+
+            CreateMap<Question, QuestionWithAnswersDto>()
+               .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answers.OrderBy(a => a.OrderIndex)));
 
             CreateMap<CreateQuestionDto, Question>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -56,12 +76,27 @@ namespace QuizHub.Application.Mappings
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answers));
 
+            CreateMap<UpdateQuestionDto, Question>()
+               .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+               .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+               .ForMember(dest => dest.QuizId, opt => opt.Ignore())
+               .ForMember(dest => dest.Quiz, opt => opt.Ignore())
+               .ForMember(dest => dest.UserAnswers, opt => opt.Ignore())
+               .ForMember(dest => dest.Answers, opt => opt.Ignore()); // Answers handled separately
+
             // Answer mappings
             CreateMap<Answer, AnswerDto>();
             CreateMap<CreateAnswerDto, Answer>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
+            CreateMap<UpdateAnswerDto, Answer>()
+              .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+              .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+              .ForMember(dest => dest.QuestionId, opt => opt.Ignore())
+              .ForMember(dest => dest.Question, opt => opt.Ignore())
+              .ForMember(dest => dest.UserAnswers, opt => opt.Ignore());
 
             // Quiz Attempt mappings
             CreateMap<QuizAttempt, QuizAttemptDto>()

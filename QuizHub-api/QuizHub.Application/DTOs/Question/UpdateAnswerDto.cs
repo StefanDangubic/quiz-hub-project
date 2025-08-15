@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace QuizHub.Application.DTOs.Question
 {
-    public class CreateAnswerDto
+    public class UpdateAnswerDto
     {
-       // [Required(ErrorMessage = "Answer text is required")]
-       // [StringLength(500, MinimumLength = 1, ErrorMessage = "Answer text must be between 1 and 500 characters")]
+        public int? Id { get; set; } // Null for new answers
+    
         public string AnswerText { get; set; } = string.Empty;
 
         public bool IsCorrect { get; set; }

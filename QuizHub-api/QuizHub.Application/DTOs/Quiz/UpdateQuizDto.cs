@@ -9,21 +9,25 @@ using System.Threading.Tasks;
 
 namespace QuizHub.Application.DTOs.Quiz
 {
-    public class CreateQuizDto
+    public class UpdateQuizDto
     {
+      //  [Required]
+    //    [StringLength(200)]
         public string Title { get; set; } = string.Empty;
 
-       
+      //  [StringLength(1000)]
         public string? Description { get; set; }
 
+//[Required]
         public int CategoryId { get; set; }
 
-    
+     //   [Required]
         public DifficultyLevel DifficultyLevel { get; set; }
 
-     
         public int TimeLimit { get; set; }
 
-        public List<CreateQuestionDto> Questions { get; set; } = new List<CreateQuestionDto>();
+     //   public string? ImageUrl { get; set; }
+
+        public List<UpdateQuestionDto> Questions { get; set; } = new List<UpdateQuestionDto>();
     }
 }

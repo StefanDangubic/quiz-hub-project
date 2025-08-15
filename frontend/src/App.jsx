@@ -13,7 +13,8 @@ import Header from "./components/layout/Header"
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import QuizCreatorPage from './pages/QuizCreatorPage';
 import CategoryManagementPage from './pages/CategoryManagementPage';
-
+import QuizManagementPage from './pages/QuizManagementPage';
+import QuizEditorPage from './pages/QuizEditorPage';
 
 
 export default function App() {
@@ -82,6 +83,24 @@ export default function App() {
                 element={
                   <ProtectedRoute adminOnly>
                     <CategoryManagementPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/quizzes"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <QuizManagementPage />
+                  </ProtectedRoute>
+                }
+              />
+
+                <Route
+                path="/admin/quizzes/edit/:id"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <QuizEditorPage />
                   </ProtectedRoute>
                 }
               />
