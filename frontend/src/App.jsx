@@ -15,6 +15,9 @@ import QuizCreatorPage from './pages/QuizCreatorPage';
 import CategoryManagementPage from './pages/CategoryManagementPage';
 import QuizManagementPage from './pages/QuizManagementPage';
 import QuizEditorPage from './pages/QuizEditorPage';
+import QuizListPage from './pages/QuizListPage';
+import QuizPlayerPage from './pages/QuizPlayerPage'
+import QuizResultPage from './pages/QuizResultPage';
 
 
 export default function App() {
@@ -39,14 +42,33 @@ export default function App() {
                 }
               />
 
-              {/* <Route
+              <Route
                 path="/quizzes"
                 element={
                   <ProtectedRoute>
                     <QuizListPage />
                   </ProtectedRoute>
                 }
-              /> */}
+              />
+
+                <Route
+                path="/quiz/:id"
+                element={
+                  <ProtectedRoute>
+                    <QuizPlayerPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/quiz-result/:attemptId"
+                element={
+                  <ProtectedRoute>
+                    <QuizResultPage />
+                  </ProtectedRoute>
+                }
+              />
+
 
               <Route
                 path="/leaderboard"

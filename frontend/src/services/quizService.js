@@ -93,14 +93,20 @@ export const quizService = {
     }
   },
 
-  async submitQuiz(quizId, answers) {
+  
+  async submitQuiz(id, answers, timeSpent) {
     try {
-      const response = await httpClient.post(`/quizzes/${quizId}/submit`, { answers })
+      const response = await httpClient.post(`/quizzes/${id}/submit`, {
+        quizId: id,
+        answers,
+        timeSpent,
+      })
       return ApiResponse.fromApiResponse(response)
     } catch (error) {
       return ApiResponse.error(error.message)
     }
   },
+
 
   async getQuizResults(attemptId) {
     try {
@@ -108,6 +114,23 @@ export const quizService = {
       return ApiResponse.fromApiResponse(response)
     } catch (error) {
       return ApiResponse.error(error.message)
+    }
+  },
+
+  async getQuizResult(attemptId) {
+    try {
+      const response = await httpClient.get(`/quizzes/attempts/${attemptId}/result`)
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Failed to fetch quiz result",
+        errors: error.response?.data?.errors || [],
+      }
     }
   },
 

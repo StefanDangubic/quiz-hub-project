@@ -134,8 +134,45 @@ namespace QuizHub_api.Controllers
             return BadRequest(ApiResponse<object>.ErrorResponse(result.Message, result.Errors));
         }
 
+        [HttpPost("{id}/submit")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<QuizResultDto>>> SubmitQuiz(int id, [FromBody] SubmitQuizDto submitQuizDto)
+        {
+            if (id != submitQuizDto.QuizId)
+            {
+                return BadRequest(ApiResponse<QuizResultDto>.ErrorResponse("Quiz ID mismatch"));
+            }
+
+           
+
+            var userId = GetCurrentUserId();
+            var result = await _quizService.SubmitQuizAsync(submitQuizDto, userId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<QuizResultDto>.SuccessResponse(result.Data!, result.Message));
+            }
+
+            return BadRequest(ApiResponse<QuizResultDto>.ErrorResponse(result.Message, result.Errors));
+        }
 
 
+        [HttpGet("attempts/{attemptId}/result")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<QuizResultDto>>> GetQuizResult(int attemptId)
+        {
+            var userId = GetCurrentUserId();
+            var result = await _quizService.GetQuizResultAsync(attemptId, userId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<QuizResultDto>.SuccessResponse(result.Data!));
+            }
+
+            return NotFound(ApiResponse<QuizResultDto>.ErrorResponse(result.Message));
+        }
+
+       
 
         private int GetCurrentUserId()
         {

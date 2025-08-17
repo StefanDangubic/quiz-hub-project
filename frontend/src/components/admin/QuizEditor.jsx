@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { quizService } from "../../services/quizService"
@@ -21,7 +19,7 @@ const QuizEditor = () => {
     categoryId: "",
     difficultyLevel: 0,
     timeLimit: "",
-   // imageUrl: "",
+   
     questions: [],
   })
 
@@ -69,14 +67,12 @@ const QuizEditor = () => {
           categoryId: quizData.categoryId || "",
           difficultyLevel: quizData.difficultyLevel || 0,
           timeLimit: quizData.timeLimit || "",
-         // imageUrl: quizData.imageUrl || "",
           questions:
             quizData.questions?.map((q) => ({
               id: q.id,
               questionText: q.questionText,
               questionType: q.questionType,
-              points: q.points,
-           //   imageUrl: q.imageUrl || "",
+              points: q.points,      
               correctAnswer: q.questionType === 4 ? q.answers?.find((a) => a.isCorrect)?.answerText || "" : "",
               answers:
                 q.answers?.map((a) => ({
@@ -166,20 +162,6 @@ const QuizEditor = () => {
     }
   }
 
-//   const handleImageUpload = async (file, type, questionIndex = null) => {
-//     try {
-//       const response = await uploadService.uploadImage(file)
-//       if (response.success) {
-//         if (type === "quiz") {
-//           handleQuizChange("imageUrl", response.data.url)
-//         } else if (type === "question" && questionIndex !== null) {
-//           handleQuestionChange(questionIndex, "imageUrl", response.data.url)
-//         }
-//       }
-//     } catch (error) {
-//       console.error("Error uploading image:", error)
-//     }
-//   }
 
   const addQuestion = () => {
     const newQuestion = {
@@ -547,7 +529,7 @@ const QuizEditor = () => {
                 value={quiz.timeLimit}
                 onChange={(e) => handleQuizChange("timeLimit", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-               // placeholder="Leave empty for no time limit"
+              
                 min="1"
               />
             </div>
@@ -567,14 +549,7 @@ const QuizEditor = () => {
             {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
           </div>
 
-          {/* <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Quiz Image</label>
-            <ImageUpload
-              currentImage={quiz.imageUrl}
-              onImageUpload={(file) => handleImageUpload(file, "quiz")}
-              onImageRemove={() => handleQuizChange("imageUrl", "")}
-            />
-          </div> */}
+         
         </div>
 
         {/* Questions */}
@@ -664,14 +639,7 @@ const QuizEditor = () => {
                   )}
                 </div>
 
-                {/* <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Question Image</label>
-                  <ImageUpload
-                    currentImage={question.imageUrl}
-                    onImageUpload={(file) => handleImageUpload(file, "question", questionIndex)}
-                    onImageRemove={() => handleQuestionChange(questionIndex, "imageUrl", "")}
-                  />
-                </div> */}
+                
 
                 {renderAnswerSection(question, questionIndex)}
               </div>
