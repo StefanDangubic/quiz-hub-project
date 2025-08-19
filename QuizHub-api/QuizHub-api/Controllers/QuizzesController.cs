@@ -172,7 +172,22 @@ namespace QuizHub_api.Controllers
             return NotFound(ApiResponse<QuizResultDto>.ErrorResponse(result.Message));
         }
 
-       
+        [HttpGet("my-history")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<List<UserQuizHistoryDto>>>> GetMyHistory([FromQuery] int? quizId = null)
+        {
+            var userId = GetCurrentUserId();
+            var result = await _quizService.GetUserQuizHistoryAsync(userId, quizId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<List<UserQuizHistoryDto>>.SuccessResponse(result.Data!));
+            }
+
+            return BadRequest(ApiResponse<List<UserQuizHistoryDto>>.ErrorResponse(result.Message, result.Errors));
+        }
+
+
 
         private int GetCurrentUserId()
         {

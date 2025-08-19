@@ -120,17 +120,9 @@ export const quizService = {
   async getQuizResult(attemptId) {
     try {
       const response = await httpClient.get(`/quizzes/attempts/${attemptId}/result`)
-      return {
-        success: true,
-        data: response.data.data,
-        message: response.data.message,
-      }
+        return ApiResponse.fromApiResponse(response)
     } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Failed to fetch quiz result",
-        errors: error.response?.data?.errors || [],
-      }
+       return ApiResponse.error(error.message)
     }
   },
 
@@ -142,4 +134,15 @@ export const quizService = {
       return ApiResponse.error(error.message)
     }
   },
+   async getUserHistory(quizId = null) {
+    try {
+      const params = quizId ? { quizId } : {}
+      const response = await httpClient.get("/quizzes/my-history", { params })
+      return ApiResponse.fromApiResponse(response)
+    } catch (error) {
+        return ApiResponse.error(error.message)
+    }
+  }
+
+
 }

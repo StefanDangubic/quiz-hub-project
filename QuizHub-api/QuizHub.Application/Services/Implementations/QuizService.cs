@@ -410,5 +410,48 @@ namespace QuizHub.Application.Services.Implementations
                     return "No correct answer";
             }
         }
+
+        public async Task<Result<List<UserQuizHistoryDto>>> GetUserQuizHistoryAsync(int userId, int? quizId = null)
+        {
+            try
+            {
+                var attempts = await _quizAttemptRepository.GetUserQuizHistoryAsync(userId, quizId);
+                var historyDtos = new List<UserQuizHistoryDto>();
+
+                // Group by quiz to calculate attempt numbers and personal bests
+                var groupedAttempts = attempts.GroupBy(a => a.QuizId);
+
+                foreach (var quizGroup in groupedAttempts)
+                {
+                    var quizAttempts = quizGroup.OrderBy(a => a.CompletedAt).ToList();
+                    // var bestScore = quizAttempts.Max(a => a.Score);
+                    var bestAttempt = quizAttempts
+                      .OrderByDescending(a => a.Score)   // prvo veći score
+                      .ThenBy(a => a.TimeSpent)          // ako je isti score, manji timeSpent
+                      .First();
+
+                    for (int i = 0; i < quizAttempts.Count; i++)
+                    {
+                        var attempt = quizAttempts[i];
+                        var historyDto = _mapper.Map<UserQuizHistoryDto>(attempt);
+                        historyDto.AttemptNumber = i + 1;
+                       // historyDto.IsPersonalBest = attempt.Score == bestScore;
+                       
+                        historyDto.IsPersonalBest = attempt.Id == bestAttempt.Id;
+
+                        historyDtos.Add(historyDto);
+                    }
+                }
+
+                // Sort by completion date descending
+                historyDtos = historyDtos.OrderByDescending(h => h.CompletedAt).ToList();
+
+                return Result<List<UserQuizHistoryDto>>.Success(historyDtos);
+            }
+            catch (Exception ex)
+            {
+                return Result<List<UserQuizHistoryDto>>.Failure($"Error retrieving user quiz history: {ex.Message}");
+            }
+        }
     }
 }

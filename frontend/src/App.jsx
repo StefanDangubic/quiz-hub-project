@@ -18,6 +18,7 @@ import QuizEditorPage from './pages/QuizEditorPage';
 import QuizListPage from './pages/QuizListPage';
 import QuizPlayerPage from './pages/QuizPlayerPage'
 import QuizResultPage from './pages/QuizResultPage';
+import MyResultsPage from './pages/MyResultsPage';
 
 
 export default function App() {
@@ -65,6 +66,15 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <QuizResultPage />
+                  </ProtectedRoute>
+                }
+              />
+
+               <Route
+                path="/my-results"
+                element={
+                  <ProtectedRoute>
+                    <MyResultsPage />
                   </ProtectedRoute>
                 }
               />

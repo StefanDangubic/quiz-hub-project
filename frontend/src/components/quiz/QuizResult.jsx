@@ -10,8 +10,10 @@ const QuizResult = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [result, setResult] = useState(location.state?.result || null)
-  const [loading, setLoading] = useState(!result)
+ const [result, setResult] = useState(location.state?.result || null)
+//  const [result, setResult] = useState(null)
+  // const [loading, setLoading] = useState(true)
+ const [loading, setLoading] = useState(!result)
   const [error, setError] = useState("")
 
   useEffect(() => {
@@ -19,6 +21,10 @@ const QuizResult = () => {
       loadResult()
     }
   }, [attemptId, result])
+  // useEffect(() => {
+  //   loadResult()
+  // }, [attemptId])
+
 
   const loadResult = async () => {
     try {

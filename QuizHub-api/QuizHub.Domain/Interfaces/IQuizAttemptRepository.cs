@@ -14,5 +14,7 @@ namespace QuizHub.Domain.Interfaces
         Task<QuizAttempt?> GetAttemptWithAnswersAsync(int attemptId);
         Task<IEnumerable<QuizAttempt>> GetTopScoresAsync(int quizId, int count = 10);
         Task<IEnumerable<QuizAttempt>> GetLeaderboardAsync(int count = 100);
+
+        Task<IEnumerable<QuizAttempt>> GetUserQuizHistoryAsync(int userId, int? quizId = null);
     }
 }

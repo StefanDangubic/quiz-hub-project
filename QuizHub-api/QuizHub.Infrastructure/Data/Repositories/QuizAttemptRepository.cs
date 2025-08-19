@@ -38,14 +38,24 @@ namespace QuizHub.Infrastructure.Data.Repositories
 
         public async Task<QuizAttempt?> GetAttemptWithAnswersAsync(int attemptId)
         {
+
             return await _dbSet
-                .Include(qa => qa.Quiz)
-                .Include(qa => qa.User)
+              .Include(qa => qa.Quiz)
+              .ThenInclude(q => q.Questions)
+              .ThenInclude(q => q.Answers)
+              .Include(qa => qa.User)
                 .Include(qa => qa.UserAnswers)
-                    .ThenInclude(ua => ua.Question)
-                .Include(qa => qa.UserAnswers)
-                    .ThenInclude(ua => ua.Answer)
-                .FirstOrDefaultAsync(qa => qa.Id == attemptId);
+              .ThenInclude(ua => ua.Answer)
+              .FirstOrDefaultAsync(qa => qa.Id == attemptId);
+            //return await _dbSet
+            //    .Include(qa => qa.Quiz)
+            //    .Include(qa => qa.User)
+            //    .Include(qa => qa.UserAnswers)
+            //        .ThenInclude(ua => ua.Question)
+            //    .Include(qa => qa.UserAnswers)
+            //        .ThenInclude(ua => ua.Answer)
+            //    .FirstOrDefaultAsync(qa => qa.Id == attemptId);
+
         }
 
         public async Task<IEnumerable<QuizAttempt>> GetTopScoresAsync(int quizId, int count = 10)
@@ -70,6 +80,23 @@ namespace QuizHub.Infrastructure.Data.Repositories
                 .ThenBy(qa => qa.TimeSpent)
                 .ThenBy(qa => qa.CompletedAt)
                 .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<QuizAttempt>> GetUserQuizHistoryAsync(int userId, int? quizId = null)
+        {
+            var query = _dbSet
+                .Include(qa => qa.Quiz)
+                    .ThenInclude(q => q.Category)
+                .Where(qa => qa.UserId == userId);
+
+            if (quizId.HasValue)
+            {
+                query = query.Where(qa => qa.QuizId == quizId.Value);
+            }
+
+            return await query
+                .OrderByDescending(qa => qa.CompletedAt)
                 .ToListAsync();
         }
     }

@@ -104,10 +104,74 @@ namespace QuizHub.Application.Mappings
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Quiz.Category.Name))
                 .ForMember(dest => dest.Percentage, opt => opt.MapFrom(src => src.Percentage));
 
-            CreateMap<QuizAttempt, QuizResultDto>()
+
+            CreateMap<QuizAttempt, UserQuizHistoryDto>()
                 .ForMember(dest => dest.AttemptId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Quiz.Category.Name))
                 .ForMember(dest => dest.Percentage, opt => opt.MapFrom(src => src.Percentage));
+
+            //CreateMap<QuizAttempt, QuizResultDto>()
+            //    .ForMember(dest => dest.AttemptId, opt => opt.MapFrom(src => src.Id))
+            //    .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
+            //    .ForMember(dest => dest.Percentage, opt => opt.MapFrom(src => src.Percentage));
+            CreateMap<QuizAttempt, QuizResultDto>()
+               .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
+               .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Quiz.Questions.Select(q => new QuestionResultDto
+               {
+                   QuestionId = q.Id,
+                   QuestionText = q.QuestionText,
+                   Points = q.Points,
+                   IsCorrect = src.UserAnswers.Any(ua => ua.QuestionId == q.Id && ua.IsCorrect),
+                   UserAnswer = GetUserAnswerText(q, src.UserAnswers.FirstOrDefault(ua => ua.QuestionId == q.Id)),
+                   CorrectAnswer = GetCorrectAnswerText(q)
+               })));
+
+          
+        }
+
+        private string GetUserAnswerText(Question question, UserAnswer? userAnswer)
+        {
+            if (userAnswer == null) return "No answer";
+
+            switch (question.QuestionType)
+            {
+                case Domain.Enums.QuestionType.SingleChoice:
+                case Domain.Enums.QuestionType.TrueFalse:
+                    var selectedAnswer = question.Answers.FirstOrDefault(a => a.Id == userAnswer.AnswerId);
+                    return selectedAnswer?.AnswerText ?? "No answer";
+
+                case Domain.Enums.QuestionType.MultipleChoice:
+                    if (string.IsNullOrEmpty(userAnswer.UserInput)) return "No answer";
+                    var answerIds = userAnswer.UserInput.Split(',').Select(int.Parse).ToList();
+                    var selectedAnswers = question.Answers.Where(a => answerIds.Contains(a.Id)).Select(a => a.AnswerText);
+                    return string.Join(", ", selectedAnswers);
+
+                case Domain.Enums.QuestionType.FillInTheBlank:
+                    return userAnswer.UserInput ?? "No answer";
+
+                default:
+                    return "No answer";
+            }
+        }
+
+        private string GetCorrectAnswerText(Question question)
+        {
+            switch (question.QuestionType)
+            {
+                case Domain.Enums.QuestionType.SingleChoice:
+                case Domain.Enums.QuestionType.TrueFalse:
+                case Domain.Enums.QuestionType.FillInTheBlank:
+                    var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
+                    return correctAnswer?.AnswerText ?? "No correct answer";
+
+                case Domain.Enums.QuestionType.MultipleChoice:
+                    var correctAnswers = question.Answers.Where(a => a.IsCorrect).Select(a => a.AnswerText);
+                    return string.Join(", ", correctAnswers);
+
+                default:
+                    return "No correct answer";
+            }
         }
     }
 }

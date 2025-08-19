@@ -12,7 +12,7 @@ const QuizPlayer = () => {
   const [quiz, setQuiz] = useState(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
-  const [timeLeft, setTimeLeft] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [startTime] = useState(Date.now())
   const [loading, setLoading] = useState(true)
@@ -23,22 +23,41 @@ const QuizPlayer = () => {
     loadQuiz()
   }, [id])
 
-  // Timer effect
-  useEffect(() => {
-    if (quiz && quiz.timeLimit && timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            handleSubmit()
-            return 0
-          }
-          return prev - 1
-        })
+  // // Timer effect
+  // useEffect(() => {
+  //   if (quiz && quiz.timeLimit && timeLeft > 0) {
+  //     const timer = setInterval(() => {
+  //       setTimeLeft((prev) => {
+  //         if (prev <= 1) {
+  //           handleSubmit()
+  //           return 0
+  //         }
+  //         return prev - 1
+  //       })
+  //     }, 1000)
+
+  //     return () => clearInterval(timer)
+  //   }
+  // }, [quiz,timeLeft])
+
+  // Timer effect - pravi se samo jedan interval
+   useEffect(() => {
+     if (quiz && quiz.timeLimit && timeLeft > 0) {
+         const timer = setInterval(() => {
+         setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0))
       }, 1000)
 
-      return () => clearInterval(timer)
+       return () => clearInterval(timer) // očisti interval kad se komponenta unmountuje
+  }
+}, [quiz]) // <<< samo quiz u dependencies
+
+// Kad vreme istekne, pozovi handleSubmit JEDNOM
+    useEffect(() => {
+      if (timeLeft === 0) {
+      handleSubmit()
     }
-  }, [quiz])
+    }, [timeLeft])
+
 
   const loadQuiz = async () => {
     try {
@@ -112,6 +131,7 @@ const QuizPlayer = () => {
       const response = await quizService.submitQuiz(id, formattedAnswers, timeSpent)
 
       if (response.success) {
+        // navigate(`/quiz-result/${response.data.attemptId}`)
         navigate(`/quiz-result/${response.data.attemptId}`, {
           state: { result: response.data },
         })
@@ -124,6 +144,8 @@ const QuizPlayer = () => {
       setIsSubmitting(false)
     }
   }, [answers, id, navigate, startTime, isSubmitting])
+
+   
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
