@@ -11,10 +11,18 @@ namespace QuizHub.Application.DTOs.Leaderboard
         public int UserId { get; set; }
         public string Username { get; set; } = string.Empty;
         public int TotalQuizzesTaken { get; set; }
-        public int TotalScore { get; set; }
-        public double AverageScore { get; set; }
-        public int BestScore { get; set; }
+        public List<QuizStatsDto> RecentQuizzes { get; set; } = new List<QuizStatsDto>();
         public List<CategoryStatsDto> CategoryStats { get; set; } = new List<CategoryStatsDto>();
+    }
+
+    public class QuizStatsDto
+    {
+        public int QuizId { get; set; }
+        public string QuizTitle { get; set; } = string.Empty;
+        public int Score { get; set; }
+        public int MaxScore { get; set; }
+        public double Percentage { get; set; }
+        public DateTime CompletedAt { get; set; }
     }
 
     public class CategoryStatsDto
@@ -22,7 +30,5 @@ namespace QuizHub.Application.DTOs.Leaderboard
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public int QuizzesTaken { get; set; }
-        public double AverageScore { get; set; }
-        public int BestScore { get; set; }
     }
 }

@@ -12,9 +12,9 @@ namespace QuizHub.Application.Services.Interfaces
     {
        
         Task<Result<List<LeaderboardEntryDto>>> GetGlobalLeaderboardAsync(int quizId, string? timePeriod = null, int count = 100);
-       
         Task<Result<int>> GetUserPositionAsync(int userId, int quizId, string? timePeriod = null);
         Task<Result<List<QuizFilterDto>>> GetQuizzesForFilterAsync();
+        Task<Result<UserStatsDto>> GetUserStatsAsync(int userId);
 
     }
 }

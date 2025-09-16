@@ -16,11 +16,13 @@ namespace QuizHub.Infrastructure.Data.Repositories
         {
         }
 
+        
         public async Task<IEnumerable<QuizAttempt>> GetUserAttemptsAsync(int userId)
         {
             return await _dbSet
                 .Include(qa => qa.Quiz)
-                    .ThenInclude(q => q.Category)
+                    .ThenInclude(q => q.Questions) 
+                .Include(qa => qa.Quiz.Category)   
                 .Where(qa => qa.UserId == userId)
                 .OrderByDescending(qa => qa.CompletedAt)
                 .ToListAsync();

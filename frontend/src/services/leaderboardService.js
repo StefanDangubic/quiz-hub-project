@@ -51,5 +51,15 @@ export const leaderboardService = {
       return ApiResponse.error(error.message)
     }
   },
+
+  async getUserStats(userId) {
+    try {
+      const response = await httpClient.get(`/leaderboard/user/${userId}/stats`)
+      return ApiResponse.fromApiResponse(response)
+    } catch (error) {
+      return ApiResponse.error(error.message)
+    }
+  },
+
  
 };

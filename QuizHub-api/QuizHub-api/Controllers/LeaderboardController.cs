@@ -80,7 +80,28 @@ namespace QuizHub_api.Controllers
             return BadRequest(ApiResponse<List<QuizFilterDto>>.ErrorResponse(result.Message, result.Errors));
         }
 
-       
+
+        [HttpGet("user/{userId}/stats")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<UserStatsDto>>> GetUserStats(int userId)
+        {
+            var currentUserId = GetCurrentUserId();
+
+            if (currentUserId != userId && !User.IsInRole(UserRole.Admin.ToString()))
+            {
+                return Forbid();
+            }
+
+            var result = await _leaderboardService.GetUserStatsAsync(userId);
+
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<UserStatsDto>.SuccessResponse(result.Data!));
+            }
+
+            return BadRequest(ApiResponse<UserStatsDto>.ErrorResponse(result.Message, result.Errors));
+        }
+
 
         private int GetCurrentUserId()
         {
