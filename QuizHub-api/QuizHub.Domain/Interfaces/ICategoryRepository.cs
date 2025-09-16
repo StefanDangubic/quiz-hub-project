@@ -9,6 +9,7 @@ namespace QuizHub.Domain.Interfaces
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<Category>> GetAllWithQuizCountAsync();
+            Task<IEnumerable<Category>> GetAllWithQuizCountAsync();
+ 
     }
 }

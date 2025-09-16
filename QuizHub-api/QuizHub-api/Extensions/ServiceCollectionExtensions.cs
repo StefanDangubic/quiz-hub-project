@@ -43,6 +43,8 @@ namespace QuizHub_api.Extensions
             services.AddScoped<IQuizRepository, QuizRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 
             // Services
             services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -52,6 +54,7 @@ namespace QuizHub_api.Extensions
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IQuizService, QuizService>();
             services.AddScoped<ILeaderboardService, LeaderboardService>();
+            services.AddScoped<IAdminService, AdminService>();
 
 
             return services;
