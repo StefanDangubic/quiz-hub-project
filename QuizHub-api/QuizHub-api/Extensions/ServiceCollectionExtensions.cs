@@ -51,6 +51,7 @@ namespace QuizHub_api.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IQuizService, QuizService>();
+            services.AddScoped<ILeaderboardService, LeaderboardService>();
 
 
             return services;

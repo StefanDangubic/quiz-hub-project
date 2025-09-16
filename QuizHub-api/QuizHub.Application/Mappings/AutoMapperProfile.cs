@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using QuizHub.Application.DTOs.Auth;
 using QuizHub.Application.DTOs.Category;
+using QuizHub.Application.DTOs.Leaderboard;
 using QuizHub.Application.DTOs.Question;
 using QuizHub.Application.DTOs.Quiz;
 using QuizHub.Application.DTOs.User;
@@ -127,7 +128,15 @@ namespace QuizHub.Application.Mappings
                    CorrectAnswer = GetCorrectAnswerText(q)
                })));
 
-          
+
+            // Leaderboard mappings
+            CreateMap<QuizAttempt, LeaderboardEntryDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => src.User.ProfileImage))
+                .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Quiz.Category.Name));
+
+
         }
 
         private string GetUserAnswerText(Question question, UserAnswer? userAnswer)

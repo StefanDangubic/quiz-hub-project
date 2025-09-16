@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using QuizHub.Application.Common;
 using QuizHub.Application.DTOs.Leaderboard;
 using QuizHub.Application.Services.Interfaces;
+using QuizHub.Domain.Enums;
+using QuizHub_api.Attributes;
 
 namespace QuizHub_api.Controllers
 {
@@ -18,29 +20,20 @@ namespace QuizHub_api.Controllers
             _leaderboardService = leaderboardService;
         }
 
-        /// <summary>
-        /// Get quiz-specific leaderboard
-        /// </summary>
-        [HttpGet("quiz/{quizId}")]
-        public async Task<ActionResult<ApiResponse<List<LeaderboardEntryDto>>>> GetQuizLeaderboard(int quizId, [FromQuery] int limit = 50)
-        {
-            var result = await _leaderboardService.GetQuizLeaderboardAsync(quizId, limit);
 
-            if (result.IsSuccess)
-            {
-                return Ok(ApiResponse<List<LeaderboardEntryDto>>.SuccessResponse(result.Data!));
-            }
 
-            return BadRequest(ApiResponse<List<LeaderboardEntryDto>>.ErrorResponse(result.Message, result.Errors));
-        }
-
-        /// <summary>
-        /// Get global leaderboard
-        /// </summary>
         [HttpGet("global")]
-        public async Task<ActionResult<ApiResponse<List<LeaderboardEntryDto>>>> GetGlobalLeaderboard([FromQuery] int limit = 50)
+        public async Task<ActionResult<ApiResponse<List<LeaderboardEntryDto>>>> GetGlobalLeaderboard(
+            [FromQuery] int quizId,
+            [FromQuery] string? timePeriod = null,
+            [FromQuery] int count = 100)
         {
-            var result = await _leaderboardService.GetGlobalLeaderboardAsync(limit);
+            if (quizId <= 0)
+            {
+                return BadRequest(ApiResponse<List<LeaderboardEntryDto>>.ErrorResponse("Quiz ID is required."));
+            }
+
+            var result = await _leaderboardService.GetGlobalLeaderboardAsync(quizId, timePeriod, count);
 
             if (result.IsSuccess)
             {
@@ -50,5 +43,49 @@ namespace QuizHub_api.Controllers
             return BadRequest(ApiResponse<List<LeaderboardEntryDto>>.ErrorResponse(result.Message, result.Errors));
         }
 
+
+        [HttpGet("user/position")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<int>>> GetUserPosition(
+            [FromQuery] int quizId, 
+            [FromQuery] string? timePeriod = null)
+        {
+            if (quizId <= 0)
+            {
+                return BadRequest(ApiResponse<int>.ErrorResponse("Quiz ID is required."));
+            }
+
+            var currentUserId = GetCurrentUserId();
+            var result = await _leaderboardService.GetUserPositionAsync(currentUserId, quizId, timePeriod);
+
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<int>.SuccessResponse(result.Data));
+            }
+
+            return BadRequest(ApiResponse<int>.ErrorResponse(result.Message, result.Errors));
+        }
+
+
+        [HttpGet("quizzes")]
+        public async Task<ActionResult<ApiResponse<List<QuizFilterDto>>>> GetQuizzesForFilter()
+        {
+            var result = await _leaderboardService.GetQuizzesForFilterAsync();
+
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<List<QuizFilterDto>>.SuccessResponse(result.Data!));
+            }
+
+            return BadRequest(ApiResponse<List<QuizFilterDto>>.ErrorResponse(result.Message, result.Errors));
+        }
+
+       
+
+        private int GetCurrentUserId()
+        {
+            var userIdClaim = User.FindFirst("userId")?.Value;
+            return int.Parse(userIdClaim ?? "0");
+        }
     }
 }

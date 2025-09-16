@@ -187,7 +187,20 @@ namespace QuizHub_api.Controllers
             return BadRequest(ApiResponse<List<UserQuizHistoryDto>>.ErrorResponse(result.Message, result.Errors));
         }
 
+        [HttpGet("{quizId}/my-progress")]
+        [Authorize]
+        public async Task<ActionResult<ApiResponse<QuizProgressDto>>> GetMyProgress(int quizId)
+        {
+            var userId = GetCurrentUserId();
+            var result = await _quizService.GetQuizProgressAsync(userId, quizId);
 
+            if (result.IsSuccess)
+            {
+                return Ok(ApiResponse<QuizProgressDto>.SuccessResponse(result.Data!));
+            }
+
+            return BadRequest(ApiResponse<QuizProgressDto>.ErrorResponse(result.Message, result.Errors));
+        }
 
         private int GetCurrentUserId()
         {

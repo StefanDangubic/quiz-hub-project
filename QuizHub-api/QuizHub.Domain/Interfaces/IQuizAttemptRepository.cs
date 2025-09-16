@@ -16,5 +16,10 @@ namespace QuizHub.Domain.Interfaces
         Task<IEnumerable<QuizAttempt>> GetLeaderboardAsync(int count = 100);
 
         Task<IEnumerable<QuizAttempt>> GetUserQuizHistoryAsync(int userId, int? quizId = null);
+
+        Task<int> GetUserPositionInQuizAsync(int userId, int quizId, DateTime? fromDate = null, DateTime? toDate = null);
+        Task<IEnumerable<QuizAttempt>> GetQuizRankingsAsync(int quizId, DateTime? fromDate = null, DateTime? toDate = null);
+    
+
     }
 }

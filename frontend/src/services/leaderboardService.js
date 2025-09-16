@@ -2,12 +2,20 @@ import httpClient from './httpClient';
 import { ApiResponse } from '../models/ApiResponse';
 
 export const leaderboardService = {
-  async getGlobalLeaderboard(count = 100) {
+  async getGlobalLeaderboard(params = {}) {
     try {
-      const response = await httpClient.get(`/leaderboard/global?count=${count}`);
-      return ApiResponse.fromApiResponse(response);
+      const queryParams = new URLSearchParams()
+
+      if (params.quizId) queryParams.append("quizId", params.quizId)
+      if (params.timePeriod) queryParams.append("timePeriod", params.timePeriod)
+      if (params.count) queryParams.append("count", params.count)
+      if (params.page) queryParams.append("page", params.page)
+      if (params.pageSize) queryParams.append("pageSize", params.pageSize)
+
+      const response = await httpClient.get(`/leaderboard/global?${queryParams}`)
+      return ApiResponse.fromApiResponse(response)
     } catch (error) {
-      return ApiResponse.error(error.message);
+      return ApiResponse.error(error.message)
     }
   },
 
@@ -20,21 +28,28 @@ export const leaderboardService = {
     }
   },
 
-  async getCategoryLeaderboard(categoryId, count = 100) {
+  
+
+   async getUserPosition(params = {}) {
     try {
-      const response = await httpClient.get(`/leaderboard/category/${categoryId}?count=${count}`);
-      return ApiResponse.fromApiResponse(response);
+      const queryParams = new URLSearchParams()
+      if (params.quizId) queryParams.append("quizId", params.quizId)
+      if (params.timePeriod) queryParams.append("timePeriod", params.timePeriod)
+
+      const response = await httpClient.get(`/leaderboard/user/position?${queryParams}`)
+      return ApiResponse.fromApiResponse(response)
     } catch (error) {
-      return ApiResponse.error(error.message);
+      return ApiResponse.error(error.message)
     }
   },
 
-  async getUserStats(userId) {
+  async getQuizzesForFilter() {
     try {
-      const response = await httpClient.get(`/leaderboard/user/${userId}/stats`);
-      return ApiResponse.fromApiResponse(response);
+      const response = await httpClient.get("/quizzes")
+      return ApiResponse.fromApiResponse(response)
     } catch (error) {
-      return ApiResponse.error(error.message);
+      return ApiResponse.error(error.message)
     }
   },
+ 
 };

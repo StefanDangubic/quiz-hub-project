@@ -22,5 +22,6 @@ namespace QuizHub.Application.Services.Interfaces
         Task<Result<QuizResultDto>> GetQuizResultAsync(int attemptId, int userId);
 
         Task<Result<List<UserQuizHistoryDto>>> GetUserQuizHistoryAsync(int userId, int? quizId = null);
+        Task<Result<QuizProgressDto>> GetQuizProgressAsync(int userId, int quizId);
     }
 }

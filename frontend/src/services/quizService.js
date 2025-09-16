@@ -142,6 +142,14 @@ export const quizService = {
     } catch (error) {
         return ApiResponse.error(error.message)
     }
+  },
+  async getQuizProgress(quizId) {
+    try {
+      const response = await httpClient.get(`/quizzes/${quizId}/my-progress`)
+       return ApiResponse.fromApiResponse(response)
+    } catch (error) {
+      return ApiResponse.error(error.message)
+    }
   }
 
 

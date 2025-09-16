@@ -131,6 +131,17 @@ namespace QuizHub.Infrastructure.Data.Repositories
             }
         }
 
+        public async Task<IEnumerable<Quiz>> GetAllWithCategoryAsync()
+        {
+            return await _dbSet
+                .Include(q => q.Category)
+                .Where(q => q.IsActive)
+                .OrderBy(q => q.Category.Name)
+                .ThenBy(q => q.Title)
+                .ToListAsync();
+        }
+
+
         private async Task UpdateAnswersAsync(Question existingQuestion, List<Answer> newAnswers)
         {
             // Get existing answer IDs

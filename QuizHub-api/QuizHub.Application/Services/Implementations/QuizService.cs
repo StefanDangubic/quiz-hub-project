@@ -66,7 +66,42 @@ namespace QuizHub.Application.Services.Implementations
             }
         }
 
+        public async Task<Result<QuizProgressDto>> GetQuizProgressAsync(int userId, int quizId)
+        {
+            try
+            {
+                var attempts = await _quizAttemptRepository.GetUserQuizHistoryAsync(userId, quizId);
+                var quiz = await _quizRepository.GetByIdAsync(quizId);
 
+                if (quiz == null)
+                {
+                    return Result<QuizProgressDto>.Failure("Quiz not found");
+                }
+
+                var orderedAttempts = attempts.OrderBy(a => a.CompletedAt).ToList();
+                var progressDto = new QuizProgressDto
+                {
+                    QuizId = quizId,
+                    QuizTitle = quiz.Title,
+                    TotalAttempts = orderedAttempts.Count,
+                    BestScore = orderedAttempts.Any() ? orderedAttempts.Max(a => a.Percentage) : 0,
+                    AverageScore = orderedAttempts.Any() ? orderedAttempts.Average(a => a.Percentage) : 0,
+                    Attempts = orderedAttempts.Select((a, index) => new AttemptProgressDto
+                    {
+                        AttemptNumber = index + 1,
+                        Score = a.Percentage,
+                        TimeSpent = a.TimeSpent,
+                        CompletedAt = a.CompletedAt
+                    }).ToList()
+                };
+
+                return Result<QuizProgressDto>.Success(progressDto);
+            }
+            catch (Exception ex)
+            {
+                return Result<QuizProgressDto>.Failure($"Error retrieving quiz progress: {ex.Message}");
+            }
+        }
 
         public async Task<Result<PaginatedResult<QuizDto>>> GetQuizzesAsync(int page = 1, int pageSize = 10, string? searchTerm = null, int? categoryId = null, DifficultyLevel? difficulty = null)
         {
@@ -424,18 +459,17 @@ namespace QuizHub.Application.Services.Implementations
                 foreach (var quizGroup in groupedAttempts)
                 {
                     var quizAttempts = quizGroup.OrderBy(a => a.CompletedAt).ToList();
-                    // var bestScore = quizAttempts.Max(a => a.Score);
+                  
                     var bestAttempt = quizAttempts
-                      .OrderByDescending(a => a.Score)   // prvo veći score
-                      .ThenBy(a => a.TimeSpent)          // ako je isti score, manji timeSpent
+                      .OrderByDescending(a => a.Score)   
+                      .ThenBy(a => a.TimeSpent)          
                       .First();
 
                     for (int i = 0; i < quizAttempts.Count; i++)
                     {
                         var attempt = quizAttempts[i];
                         var historyDto = _mapper.Map<UserQuizHistoryDto>(attempt);
-                        historyDto.AttemptNumber = i + 1;
-                       // historyDto.IsPersonalBest = attempt.Score == bestScore;
+                        historyDto.AttemptNumber = i + 1;                  
                        
                         historyDto.IsPersonalBest = attempt.Id == bestAttempt.Id;
 
@@ -452,6 +486,8 @@ namespace QuizHub.Application.Services.Implementations
             {
                 return Result<List<UserQuizHistoryDto>>.Failure($"Error retrieving user quiz history: {ex.Message}");
             }
+
+
         }
     }
 }

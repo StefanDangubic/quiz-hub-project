@@ -10,9 +10,11 @@ namespace QuizHub.Application.Services.Interfaces
 {
     public interface ILeaderboardService
     {
-        Task<Result<List<LeaderboardEntryDto>>> GetGlobalLeaderboardAsync(int count = 100);
-        Task<Result<List<LeaderboardEntryDto>>> GetQuizLeaderboardAsync(int quizId, int count = 10);
-        Task<Result<List<LeaderboardEntryDto>>> GetCategoryLeaderboardAsync(int categoryId, int count = 100);
-      //  Task<Result<UserStatsDto>> GetUserStatsAsync(int userId);
+       
+        Task<Result<List<LeaderboardEntryDto>>> GetGlobalLeaderboardAsync(int quizId, string? timePeriod = null, int count = 100);
+       
+        Task<Result<int>> GetUserPositionAsync(int userId, int quizId, string? timePeriod = null);
+        Task<Result<List<QuizFilterDto>>> GetQuizzesForFilterAsync();
+
     }
 }

@@ -2,7 +2,9 @@
 using QuizHub.Application.Common;
 using QuizHub.Application.DTOs.Leaderboard;
 using QuizHub.Application.Services.Interfaces;
+using QuizHub.Domain.Entities;
 using QuizHub.Domain.Interfaces;
+using QuizHub.Infrastructure.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,56 +16,126 @@ namespace QuizHub.Application.Services.Implementations
     public class LeaderboardService : ILeaderboardService
     {
         private readonly IQuizAttemptRepository _quizAttemptRepository;
+        private readonly IQuizRepository _quizRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
         public LeaderboardService(
             IQuizAttemptRepository quizAttemptRepository,
+            IQuizRepository quizRepository,
             IUserRepository userRepository,
             IMapper mapper)
         {
             _quizAttemptRepository = quizAttemptRepository;
+            _quizRepository = quizRepository;
             _userRepository = userRepository;
             _mapper = mapper;
         }
+       
 
-        public Task<Result<List<LeaderboardEntryDto>>> GetCategoryLeaderboardAsync(int categoryId, int count = 100)
+
+
+        public async Task<Result<List<LeaderboardEntryDto>>> GetGlobalLeaderboardAsync(int quizId, string? timePeriod = null, int count = 100)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DateTime? fromDate = null;
+                DateTime? toDate = null;
+
+            
+                if (!string.IsNullOrEmpty(timePeriod))
+                {
+                    var now = DateTime.UtcNow;
+                    switch (timePeriod.ToLower())
+                    {
+                        case "weekly":
+                        case "nedeljni":
+                            fromDate = now.AddDays(-7);
+                            break;
+                        case "monthly":
+                        case "mesečni":
+                            fromDate = now.AddDays(-30);
+                            break;
+                    }
+                    toDate = now;
+                }
+
+                // Get leaderboard for specific quiz with time filtering
+                var attempts = await _quizAttemptRepository.GetQuizRankingsAsync(quizId, fromDate, toDate);
+                var leaderboardEntries = _mapper.Map<List<LeaderboardEntryDto>>(attempts);
+
+                // Add rank to each entry
+                for (int i = 0; i < leaderboardEntries.Count; i++)
+                {
+                    leaderboardEntries[i].Rank = i + 1;
+                }
+
+                return Result<List<LeaderboardEntryDto>>.Success(leaderboardEntries);
+            }
+            catch (Exception ex)
+            {
+                return Result<List<LeaderboardEntryDto>>.Failure($"Error retrieving global leaderboard: {ex.Message}");
+            }
         }
 
-        public Task<Result<List<LeaderboardEntryDto>>> GetGlobalLeaderboardAsync(int count = 100)
+
+        public async Task<Result<int>> GetUserPositionAsync(int userId, int quizId, string? timePeriod = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DateTime? fromDate = null;
+                DateTime? toDate = null;
+
+             
+                if (!string.IsNullOrEmpty(timePeriod))
+                {
+                    var now = DateTime.UtcNow;
+                    switch (timePeriod.ToLower())
+                    {
+                        case "weekly":
+                        case "nedeljni":
+                            fromDate = now.AddDays(-7);
+                            break;
+                        case "monthly":
+                        case "mesečni":
+                            fromDate = now.AddDays(-30);
+                            break;
+                    }
+                    toDate = now;
+                }
+
+             
+                var position = await _quizAttemptRepository.GetUserPositionInQuizAsync(userId, quizId, fromDate, toDate);
+
+                return Result<int>.Success(position);
+            }
+            catch (Exception ex)
+            {
+                return Result<int>.Failure($"Error retrieving user position: {ex.Message}");
+            }
         }
 
-        //public async Task<Result<List<LeaderboardEntryDto>>> GetGlobalLeaderboardAsync(int limit = 50)
-        //{
-        //    try
-        //    {
-        //        var topUsers = await _quizAttemptRepository.GetTopUsersAsync(limit);
-        //        var leaderboard = topUsers.Select((user, index) => new LeaderboardEntryDto
-        //        {
-        //            Rank = index + 1,
-        //            UserId = user.UserId,
-        //            Username = user.User.Username,
-        //            ProfileImageUrl = user.User.ProfileImageUrl,
-        //            TotalScore = user.TotalScore,
-        //            QuizzesCompleted = user.QuizzesCompleted,
-        //            AverageScore = user.AverageScore
-        //        }).ToList();
-
-        //        return Result<List<LeaderboardEntryDto>>.Success(leaderboard);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Result<List<LeaderboardEntryDto>>.Failure($"Error retrieving global leaderboard: {ex.Message}");
-        //    }
-        //}
-
-        public Task<Result<List<LeaderboardEntryDto>>> GetQuizLeaderboardAsync(int quizId, int count = 10)
+        public async Task<Result<List<QuizFilterDto>>> GetQuizzesForFilterAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var quizzes = await _quizRepository.GetAllWithCategoryAsync();
+                var quizFilters = quizzes.Select(q => new QuizFilterDto
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    CategoryName = q.Category.Name
+                }).OrderBy(q => q.CategoryName).ThenBy(q => q.Title).ToList();
+
+                return Result<List<QuizFilterDto>>.Success(quizFilters);
+            }
+            catch (Exception ex)
+            {
+                return Result<List<QuizFilterDto>>.Failure($"Error retrieving quizzes for filter: {ex.Message}");
+            }
         }
+
+
+   
     }
 }

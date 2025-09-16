@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate, useLocation } from "react-router-dom"
 import { Trophy, Clock, CheckCircle, XCircle, RotateCcw, Home } from "lucide-react"
 import { quizService } from "../../services/quizService"
+import QuizProgressChart from "./QuizProgressChart"
 
 const QuizResult = () => {
   const { attemptId } = useParams()
@@ -11,8 +12,7 @@ const QuizResult = () => {
   const location = useLocation()
 
  const [result, setResult] = useState(location.state?.result || null)
-//  const [result, setResult] = useState(null)
-  // const [loading, setLoading] = useState(true)
+
  const [loading, setLoading] = useState(!result)
   const [error, setError] = useState("")
 
@@ -21,9 +21,7 @@ const QuizResult = () => {
       loadResult()
     }
   }, [attemptId, result])
-  // useEffect(() => {
-  //   loadResult()
-  // }, [attemptId])
+  
 
 
   const loadResult = async () => {
@@ -143,6 +141,9 @@ const QuizResult = () => {
             <div className="text-sm text-gray-500">Time Taken</div>
           </div>
         </div>
+
+         {/* Progress Chart */}
+        <QuizProgressChart quizId={result.quizId} quizTitle={result.quizTitle} />
 
         {/* Question Review */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-8">

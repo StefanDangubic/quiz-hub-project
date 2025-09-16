@@ -47,14 +47,7 @@ namespace QuizHub.Infrastructure.Data.Repositories
                 .Include(qa => qa.UserAnswers)
               .ThenInclude(ua => ua.Answer)
               .FirstOrDefaultAsync(qa => qa.Id == attemptId);
-            //return await _dbSet
-            //    .Include(qa => qa.Quiz)
-            //    .Include(qa => qa.User)
-            //    .Include(qa => qa.UserAnswers)
-            //        .ThenInclude(ua => ua.Question)
-            //    .Include(qa => qa.UserAnswers)
-            //        .ThenInclude(ua => ua.Answer)
-            //    .FirstOrDefaultAsync(qa => qa.Id == attemptId);
+           
 
         }
 
@@ -70,7 +63,7 @@ namespace QuizHub.Infrastructure.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<QuizAttempt>> GetLeaderboardAsync(int count = 100)
+        public async Task<IEnumerable<QuizAttempt>> GetLeaderboardAsync(int count = 50)
         {
             return await _dbSet
                 .Include(qa => qa.User)
@@ -99,5 +92,81 @@ namespace QuizHub.Infrastructure.Data.Repositories
                 .OrderByDescending(qa => qa.CompletedAt)
                 .ToListAsync();
         }
+
+      
+
+        public async Task<int> GetUserPositionInQuizAsync(int userId, int quizId, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            var query = _dbSet
+                .Where(qa => qa.QuizId == quizId);
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(qa => qa.CompletedAt >= fromDate.Value);
+            }
+
+            if (toDate.HasValue)
+            {
+                query = query.Where(qa => qa.CompletedAt <= toDate.Value);
+            }
+
+      
+            var userBestAttempt = await query
+                .Where(qa => qa.UserId == userId)
+                .OrderByDescending(qa => qa.Score)
+                .ThenBy(qa => qa.TimeSpent)
+                .ThenBy(qa => qa.CompletedAt)
+                .FirstOrDefaultAsync();
+
+            if (userBestAttempt == null) return 0;
+
+            
+            var bestAttempts = await query
+                .GroupBy(qa => qa.UserId)
+                .Select(g => g.OrderByDescending(qa => qa.Score)
+                             .ThenBy(qa => qa.TimeSpent)
+                             .ThenBy(qa => qa.CompletedAt)
+                             .First())
+                .ToListAsync();
+
+            
+            var betterUsersCount = bestAttempts.Count(qa =>
+                qa.Score > userBestAttempt.Score ||
+                (qa.Score == userBestAttempt.Score && qa.TimeSpent < userBestAttempt.TimeSpent) ||
+                (qa.Score == userBestAttempt.Score && qa.TimeSpent == userBestAttempt.TimeSpent && qa.CompletedAt < userBestAttempt.CompletedAt));
+
+            return betterUsersCount + 1;
+        }
+
+        public async Task<IEnumerable<QuizAttempt>> GetQuizRankingsAsync(int quizId, DateTime? fromDate = null, DateTime? toDate = null)
+        {
+            var query = _dbSet
+                .Include(qa => qa.User)
+                .Include(qa => qa.Quiz)
+                    .ThenInclude(q => q.Category)
+                .Where(qa => qa.QuizId == quizId);
+
+            if (fromDate.HasValue)
+                query = query.Where(qa => qa.CompletedAt >= fromDate.Value);
+
+            if (toDate.HasValue)
+                query = query.Where(qa => qa.CompletedAt <= toDate.Value);
+
+            var attempts = await query.ToListAsync();
+
+            var bestAttempts = attempts
+                .GroupBy(qa => qa.UserId)
+                .Select(g => g.OrderByDescending(qa => qa.Score)
+                              .ThenBy(qa => qa.TimeSpent)
+                              .ThenBy(qa => qa.CompletedAt)
+                              .First())
+                .OrderByDescending(qa => qa.Score)
+                .ThenBy(qa => qa.TimeSpent)
+                .ThenBy(qa => qa.CompletedAt)
+                .ToList();
+
+            return bestAttempts;
+        }
     }
+
 }
