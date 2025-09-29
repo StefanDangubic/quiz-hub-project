@@ -133,7 +133,7 @@ Aplikacija koristi moderni, responzivni dizajn sa:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=...;Database=KvizHub;..."
+    "DefaultConnection": ""
   },
   "JwtSettings": {
     "SecretKey": "your-secret-key",
@@ -145,10 +145,8 @@ Aplikacija koristi moderni, responzivni dizajn sa:
    "Username": "",
    "Email": "",
    "Password": ""
- },
-"ConnectionStrings": {
-  "DefaultConnection": ""
-}
+ }
+
 ```
 
 ### Environment varijable (Frontend)
