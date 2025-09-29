@@ -10,5 +10,6 @@ namespace QuizHub.Application.Services.Interfaces
     public interface IAdminService
     {
         Task<AdminDashboardStatsDto> GetDashboardStatsAsync();
+        Task<IEnumerable<AdminQuizAttemptDto>> GetAllQuizAttemptsAsync();
     }
 }

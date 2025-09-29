@@ -181,5 +181,10 @@ namespace QuizHub.Infrastructure.Data.Repositories
                 }
             }
         }
+
+        public async Task<bool> HasQuizzesInCategoryAsync(int categoryId)
+        {
+            return await _context.Quizzes.AnyAsync(q => q.CategoryId == categoryId && q.IsActive);
+        }
     }
 }

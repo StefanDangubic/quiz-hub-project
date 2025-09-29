@@ -1,4 +1,5 @@
-﻿using QuizHub.Application.DTOs.Admin;
+﻿using AutoMapper;
+using QuizHub.Application.DTOs.Admin;
 using QuizHub.Application.Services.Interfaces;
 using QuizHub.Domain.Interfaces;
 using System;
@@ -15,17 +16,20 @@ namespace QuizHub.Application.Services.Implementations
         private readonly IQuizRepository _quizRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IQuizAttemptRepository _quizAttemptRepository;
+        private readonly IMapper _mapper;
 
         public AdminService(
             IUserRepository userRepository,
             IQuizRepository quizRepository,
             ICategoryRepository categoryRepository,
-            IQuizAttemptRepository quizAttemptRepository)
+            IQuizAttemptRepository quizAttemptRepository,
+            IMapper mapper)
         {
             _userRepository = userRepository;
             _quizRepository = quizRepository;
             _categoryRepository = categoryRepository;
             _quizAttemptRepository = quizAttemptRepository;
+            _mapper = mapper;
         }
 
         public async Task<AdminDashboardStatsDto> GetDashboardStatsAsync()
@@ -42,6 +46,12 @@ namespace QuizHub.Application.Services.Implementations
                 TotalCategories = totalCategories,
                 TotalAttempts = totalAttempts
             };
+        }
+
+        public async Task<IEnumerable<AdminQuizAttemptDto>> GetAllQuizAttemptsAsync()
+        {
+            var attempts = await _quizAttemptRepository.GetAllAttemptsForAdminAsync();
+            return _mapper.Map<IEnumerable<AdminQuizAttemptDto>>(attempts.OrderByDescending(a => a.CompletedAt));
         }
     }
 }

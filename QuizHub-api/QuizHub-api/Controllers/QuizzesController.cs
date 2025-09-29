@@ -162,7 +162,8 @@ namespace QuizHub_api.Controllers
         public async Task<ActionResult<ApiResponse<QuizResultDto>>> GetQuizResult(int attemptId)
         {
             var userId = GetCurrentUserId();
-            var result = await _quizService.GetQuizResultAsync(attemptId, userId);
+            var isAdmin = User.IsInRole("Admin");
+            var result = await _quizService.GetQuizResultAsync(attemptId, userId, isAdmin);
 
             if (result.IsSuccess)
             {
@@ -192,6 +193,7 @@ namespace QuizHub_api.Controllers
         public async Task<ActionResult<ApiResponse<QuizProgressDto>>> GetMyProgress(int quizId)
         {
             var userId = GetCurrentUserId();
+          
             var result = await _quizService.GetQuizProgressAsync(userId, quizId);
 
             if (result.IsSuccess)

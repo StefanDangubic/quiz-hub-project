@@ -226,9 +226,6 @@ const CategoryManagement = () => {
                     Description
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Quiz Count
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Created
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -246,10 +243,7 @@ const CategoryManagement = () => {
                       <div className="text-sm text-gray-600 max-w-xs truncate">
                         {category.description || "No description"}
                       </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{category.quizCount || 0}</div>
-                    </td>
+                    </td>                  
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-600">{new Date(category.createdAt).toLocaleDateString()}</div>
                     </td>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using QuizHub.Application.DTOs.Admin;
 using QuizHub.Application.DTOs.Auth;
 using QuizHub.Application.DTOs.Category;
 using QuizHub.Application.DTOs.Leaderboard;
@@ -112,10 +113,7 @@ namespace QuizHub.Application.Mappings
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Quiz.Category.Name))
                 .ForMember(dest => dest.Percentage, opt => opt.MapFrom(src => src.Percentage));
 
-            //CreateMap<QuizAttempt, QuizResultDto>()
-            //    .ForMember(dest => dest.AttemptId, opt => opt.MapFrom(src => src.Id))
-            //    .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
-            //    .ForMember(dest => dest.Percentage, opt => opt.MapFrom(src => src.Percentage));
+           
             CreateMap<QuizAttempt, QuizResultDto>()
                .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
                .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Quiz.Questions.Select(q => new QuestionResultDto
@@ -128,6 +126,12 @@ namespace QuizHub.Application.Mappings
                    CorrectAnswer = GetCorrectAnswerText(q)
                })));
 
+            // Admin quiz attempt mapping with user information
+            CreateMap<QuizAttempt, AdminQuizAttemptDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Quiz.Category.Name));
 
             // Leaderboard mappings
             CreateMap<QuizAttempt, LeaderboardEntryDto>()

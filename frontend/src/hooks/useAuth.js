@@ -6,11 +6,7 @@ export const useAuth = () => {
   const dispatch = useAppDispatch();
   const { user, token, isAuthenticated, loading, error } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!isAuthenticated && !loading) {
-      dispatch(loadUserFromStorage());
-    }
-  }, [dispatch, isAuthenticated, loading]);
+
 
   const login = async (loginRequest) => {
     const result = await dispatch(loginUser(loginRequest));

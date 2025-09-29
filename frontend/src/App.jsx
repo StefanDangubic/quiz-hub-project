@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { store } from './store';
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { loadUserFromStorage } from "./store/slices/authSlice"
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -19,12 +22,29 @@ import QuizListPage from './pages/QuizListPage';
 import QuizPlayerPage from './pages/QuizPlayerPage'
 import QuizResultPage from './pages/QuizResultPage';
 import MyResultsPage from './pages/MyResultsPage';
+import AdminResultsPage from "./pages/AdminResultsPage"
+import SmartRedirect from "./components/auth/SmartRedirect"
+
+
+function AuthInitializer() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadUserFromStorage())
+  }, [])
+
+ 
+  return null
+}
 
 
 export default function App() {
+
+
   return (
-    <Provider store={store}>
+     <Provider store={store}>
       <Router>
+        <AuthInitializer /> 
         <div className="min-h-screen bg-gray-50">
           <Header />
           <main>
@@ -137,8 +157,17 @@ export default function App() {
                 }
               />
 
-              {/* Default redirect */}
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route
+              path="/admin/results"
+              element={
+                <ProtectedRoute adminOnly>
+                  <AdminResultsPage />
+                </ProtectedRoute>
+              }
+            />
+
+              
+            <Route path="/" element={<SmartRedirect />} />
             </Routes>
           </main>
         </div>
@@ -162,51 +191,9 @@ export default function App() {
             },
           }}
         />
-        {/* <div className="App">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/leaderboard" 
-              element={
-                <ProtectedRoute>
-                  <LeaderboardPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                style: {
-                  background: '#10b981',
-                },
-              },
-              error: {
-                style: {
-                  background: '#ef4444',
-                },
-              },
-            }}
-          />
-        </div> */}
+       
       </Router>
-    </Provider>
+     </Provider>
     
   )
 }

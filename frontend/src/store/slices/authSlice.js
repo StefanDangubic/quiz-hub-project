@@ -59,8 +59,9 @@ const initialState = {
   user: null,
   token: null,
   isAuthenticated: false,
-  loading: false,
+  loading: true,
   error: null,
+    
 };
 
 const authSlice = createSlice({
@@ -110,16 +111,24 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+     .addCase(loadUserFromStorage.rejected, (state) => {
+         state.isAuthenticated = false;
+         state.user = null;
+         state.token = null;
+          state.loading = false; 
+       
       })
-      // Load from storage
       .addCase(loadUserFromStorage.fulfilled, (state, action) => {
         state.token = action.payload.token;
         state.user = action.payload.user;
         state.isAuthenticated = true;
-      });
+         state.loading = false; 
+      })
+    .addCase(loadUserFromStorage.pending, (state) => {
+      state.loading = true; 
+      
+     });
+       
   },
 });
 

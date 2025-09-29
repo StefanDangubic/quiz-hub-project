@@ -23,43 +23,66 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/dashboard" className="text-2xl font-bold text-blue-600">
-              QuizHub
-            </Link>
+            {
+              user?.role === "Admin" ? (
+                <Link to="/admin" className="text-2xl font-bold text-blue-600">
+                 QuizHub
+                </Link>
+              ) : (
+                <Link to="/dashboard" className="text-2xl font-bold text-blue-600">
+                 QuizHub
+                 </Link>
+              )
+            }
+           
           </div>
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link
-              to="/dashboard"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/quizzes"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Quizzes
-            </Link>
-            <Link to="/my-results"  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            {user?.role === "Admin" ? (
+              // Admin navigation
+              <>
+                <Link
+                  to="/admin"
+                  className="text-purple-700 hover:text-purple-800 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Admin Dashboard
+                </Link>
+                <Link
+                  to="/leaderboard"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Leaderboard
+                </Link>
+              </>
+            ) : (
+              // Regular user navigation
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/quizzes"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Quizzes
+                </Link>
+                <Link
+                  to="/my-results"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
                   My Results
-            </Link>
-            <Link
-              to="/leaderboard"
-              className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Leaderboard
-            </Link>
-
-            {/* Admin Links */}
-            {user?.role === "Admin" && (
-              <Link
-                to="/admin"
-                className="text-purple-700 hover:text-purple-800 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              >
-                Admin Panel
-              </Link>
+                </Link>
+                <Link
+                  to="/leaderboard"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Leaderboard
+                </Link>
+              </>
             )}
           </nav>
 

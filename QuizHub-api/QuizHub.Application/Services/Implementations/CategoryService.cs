@@ -4,6 +4,7 @@ using QuizHub.Application.DTOs.Category;
 using QuizHub.Application.Services.Interfaces;
 using QuizHub.Domain.Entities;
 using QuizHub.Domain.Interfaces;
+using QuizHub.Infrastructure.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,13 @@ namespace QuizHub.Application.Services.Implementations
     public class CategoryService : ICategoryService
     {
         private readonly IRepository<Category> _categoryRepository;
+        private readonly IQuizRepository _quizRepository;
         private readonly IMapper _mapper;
 
-        public CategoryService(IRepository<Category> categoryRepository, IMapper mapper)
+        public CategoryService(IRepository<Category> categoryRepository, IQuizRepository quizRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
+            _quizRepository = quizRepository;
             _mapper = mapper;
         }
 
@@ -120,6 +123,13 @@ namespace QuizHub.Application.Services.Implementations
                 {
                     return Result.Failure("Category not found");
                 }
+
+                var hasQuizzes = await _quizRepository.HasQuizzesInCategoryAsync(categoryId);
+                if (hasQuizzes)
+                {
+                    return Result.Failure("Cannot delete category that contains quizzes. Move or delete the quizzes first.");
+                }
+
 
                 await _categoryRepository.DeleteAsync(category);
                 return Result.Success("Category deleted successfully");

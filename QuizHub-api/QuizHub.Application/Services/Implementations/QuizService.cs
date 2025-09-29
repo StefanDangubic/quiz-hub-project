@@ -243,6 +243,12 @@ namespace QuizHub.Application.Services.Implementations
                     return Result.Failure("Quiz not found");
                 }
 
+                var hasAttempts = await _quizAttemptRepository.HasAttemptsForQuizAsync(quizId);
+                if (hasAttempts)
+                {
+                    return Result.Failure("Cannot delete quiz that has been attempted by users. This would remove user history.");
+                }
+
                 await _quizRepository.DeleteAsync(quiz);
 
                 return Result.Success("Quiz deleted successfully");
@@ -385,12 +391,22 @@ namespace QuizHub.Application.Services.Implementations
             }
         }
 
-        public async Task<Result<QuizResultDto>> GetQuizResultAsync(int attemptId, int userId)
+        public async Task<Result<QuizResultDto>> GetQuizResultAsync(int attemptId, int userId, bool isAdmin)
         {
             try
             {
                 var attempt = await _quizAttemptRepository.GetAttemptWithAnswersAsync(attemptId);
-                if (attempt == null || attempt.UserId != userId)
+                //if (attempt == null || attempt.UserId != userId)
+                //{
+                //    return Result<QuizResultDto>.Failure("Quiz result not found");
+                //}
+                if (attempt == null)
+                {
+                    return Result<QuizResultDto>.Failure("Quiz result not found");
+                }
+
+                // 🔹 Ako nije admin, onda mora biti vlasnik
+                if (!isAdmin && attempt.UserId != userId)
                 {
                     return Result<QuizResultDto>.Failure("Quiz result not found");
                 }

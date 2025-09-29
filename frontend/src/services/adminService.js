@@ -15,6 +15,19 @@ const adminService = {
     }
   },
 
+   getAllQuizAttempts: async () => {
+    try {
+      const response = await httpClient.get("/admin/quiz-attempts")
+      return response
+    } catch (error) {
+      console.error("Error fetching quiz attempts:", error)
+      return {
+        success: false,
+        message: error.message || "Failed to fetch quiz attempts",
+      }
+    }
+  },
+
  
 }
 

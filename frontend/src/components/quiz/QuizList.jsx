@@ -48,9 +48,6 @@ const QuizList = () => {
     navigate(`/quiz/${quizId}`);
   };
 
-  const handleViewLeaderboard = (quizId) => {
-    navigate(`/leaderboard/quiz/${quizId}`);
-  };
 
   const handlePageChange = (page) => {
     dispatch(setFilters({ page }));
@@ -120,7 +117,7 @@ const QuizList = () => {
             key={quiz.id}
             quiz={quiz}
             onTakeQuiz={handleTakeQuiz}
-            onViewLeaderboard={handleViewLeaderboard}
+          
           />
         ))}
       </div>

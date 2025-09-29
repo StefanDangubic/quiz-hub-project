@@ -19,11 +19,11 @@ export default function LoginForm() {
     formState: { errors }
   } = useForm();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    }
-  }, [isAuthenticated, navigate]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigate('/dashboard');
+  //   }
+  // }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     if (error) {
@@ -35,10 +35,16 @@ export default function LoginForm() {
   const onSubmit = async (data) => {
     const loginRequest = new LoginRequest(data.usernameOrEmail, data.password);
     const success = await login(loginRequest);
-    
+
     if (success) {
-      toast.success('Login successful!');
-      navigate('/dashboard');
+      toast.success("Login successful!")
+      const user = JSON.parse(localStorage.getItem("user"))
+      if (user?.role === 2) {
+        navigate("/admin");
+      } else {
+        const redirectPath = location.state?.from?.pathname || "/dashboard"
+        navigate(redirectPath);
+      }
     }
   };
 

@@ -17,5 +17,6 @@ namespace QuizHub.Domain.Interfaces
         Task<IEnumerable<Quiz>> SearchQuizzesAsync(string searchTerm);
         Task UpdateQuizWithQuestionsAsync(Quiz quiz);
         Task<IEnumerable<Quiz>> GetAllWithCategoryAsync();
+        Task<bool> HasQuizzesInCategoryAsync(int categoryId);
     }
 }

@@ -169,6 +169,21 @@ namespace QuizHub.Infrastructure.Data.Repositories
 
             return bestAttempts;
         }
+
+        public async Task<IEnumerable<QuizAttempt>> GetAllAttemptsForAdminAsync()
+        {
+            return await _dbSet
+                .Include(qa => qa.User)
+                .Include(qa => qa.Quiz)
+                    .ThenInclude(q => q.Category)
+                .OrderByDescending(qa => qa.CompletedAt)
+                .ToListAsync();
+        }
+
+        public async Task<bool> HasAttemptsForQuizAsync(int quizId)
+        {
+            return await _context.QuizAttempts.AnyAsync(qa => qa.QuizId == quizId);
+        }
     }
 
 }

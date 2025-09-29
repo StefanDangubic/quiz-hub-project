@@ -19,7 +19,7 @@ namespace QuizHub.Application.Services.Interfaces
         Task<Result> DeleteQuizAsync(int quizId);
         Task<Result<QuizResultDto>> SubmitQuizAsync(SubmitQuizDto submitQuizDto, int userId);
         Task<Result<List<QuizAttemptDto>>> GetUserAttemptsAsync(int userId);
-        Task<Result<QuizResultDto>> GetQuizResultAsync(int attemptId, int userId);
+        Task<Result<QuizResultDto>> GetQuizResultAsync(int attemptId, int userId, bool isAdmin);
 
         Task<Result<List<UserQuizHistoryDto>>> GetUserQuizHistoryAsync(int userId, int? quizId = null);
         Task<Result<QuizProgressDto>> GetQuizProgressAsync(int userId, int quizId);

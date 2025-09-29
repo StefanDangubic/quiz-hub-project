@@ -32,5 +32,20 @@ namespace QuizHub_api.Controllers
                 return StatusCode(500, new { success = false, message = ex.Message });
             }
         }
+
+        [HttpGet("quiz-attempts")]
+        [Authorize(UserRole.Admin)]
+        public async Task<IActionResult> GetAllQuizAttempts()
+        {
+            try
+            {
+                var attempts = await _adminService.GetAllQuizAttemptsAsync();
+                return Ok(new { success = true, data = attempts });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
     }
 }
