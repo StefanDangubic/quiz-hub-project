@@ -1,15 +1,16 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { useParams, useNavigate, useLocation } from "react-router-dom"
 import { Trophy, Clock, CheckCircle, XCircle, RotateCcw, Home } from "lucide-react"
 import { quizService } from "../../services/quizService"
 import QuizProgressChart from "./QuizProgressChart"
+import { useSelector } from "react-redux"
 
 const QuizResult = () => {
   const { attemptId } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useSelector((state) => state.auth)
 
  const [result, setResult] = useState(location.state?.result || null)
 
@@ -186,24 +187,31 @@ const QuizResult = () => {
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => navigate("/quizzes")}
-            className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <RotateCcw className="h-5 w-5 mr-2" />
-            Take Another Quiz
-          </button>
+       
 
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <Home className="h-5 w-5 mr-2" />
-            Back to Dashboard
-          </button>
-        </div>
+        {/* Actions */}
+    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+     {user?.role !== "Admin" && (
+    <>
+      <button
+        onClick={() => navigate("/quizzes")}
+        className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        <RotateCcw className="h-5 w-5 mr-2" />
+        Take Another Quiz
+      </button>
+
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        <Home className="h-5 w-5 mr-2" />
+        Back to Dashboard
+      </button>
+    </>
+          )}
+      </div>
+        
       </div>
     </div>
   )

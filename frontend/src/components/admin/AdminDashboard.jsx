@@ -60,7 +60,7 @@ const AdminDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Link to="/admin/users" className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,7 @@ const AdminDashboard = () => {
               <p className="text-2xl font-bold text-gray-900">{stats.totalUsers}</p>
             </div>
           </div>
-        </Link>
+        </div>
 
         <Link to="/admin/quizzes" className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center">

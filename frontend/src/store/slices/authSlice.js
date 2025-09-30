@@ -111,6 +111,10 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
      .addCase(loadUserFromStorage.rejected, (state) => {
          state.isAuthenticated = false;
          state.user = null;
