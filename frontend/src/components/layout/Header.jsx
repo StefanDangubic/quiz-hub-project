@@ -52,7 +52,13 @@ const Header = () => {
                   to="/leaderboard"
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                 >
-                  Leaderboard
+                   Leaderboard
+                </Link>
+                <Link
+                  to="/quiz-rooms"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                 QuizRoom
                 </Link>
               </>
             ) : (
@@ -82,8 +88,16 @@ const Header = () => {
                 >
                   Leaderboard
                 </Link>
+                 <Link
+                  to="/quiz-rooms"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                 QuizRoom
+                </Link>
+                
               </>
             )}
+            
           </nav>
 
           {/* User Menu */}

@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using QuizHub_api.Extensions;
 using QuizHub_api.Middleware;
 using QuizHub.Infrastructure.Data;
+using QuizHub_api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddControllers();
 // Add custom services
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddJwtAuthentication(builder.Configuration);
+
+builder.Services.AddSignalR(); // Added SignalR service
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -89,6 +92,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<QuizRoomHub>("/hubs/quizroom"); 
 
 using (var scope = app.Services.CreateScope())
 {

@@ -5,6 +5,7 @@ using QuizHub.Application.DTOs.Category;
 using QuizHub.Application.DTOs.Leaderboard;
 using QuizHub.Application.DTOs.Question;
 using QuizHub.Application.DTOs.Quiz;
+using QuizHub.Application.DTOs.QuizRoom;
 using QuizHub.Application.DTOs.User;
 using QuizHub.Domain.Entities;
 using System;
@@ -140,6 +141,20 @@ namespace QuizHub.Application.Mappings
                 .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
                 .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Quiz.Category.Name));
 
+
+            CreateMap<QuizRoom, QuizRoomDto>()
+                .ForMember(dest => dest.QuizTitle, opt => opt.MapFrom(src => src.Quiz.Title))
+                .ForMember(dest => dest.CreatorUsername, opt => opt.MapFrom(src => src.Creator.Username))
+                .ForMember(dest => dest.CurrentParticipants, opt => opt.MapFrom(src => src.Participants.Count));
+
+            CreateMap<QuizRoom, QuizRoomDetailsDto>()
+               .ForMember(dest => dest.CreatorUsername, opt => opt.MapFrom(src => src.Creator.Username))
+               .ForMember(dest => dest.TotalQuestions, opt => opt.MapFrom(src => src.Quiz.Questions.Count))
+               .ForMember(dest => dest.CreatorId, opt => opt.MapFrom(src => src.Creator.Id));
+
+            CreateMap<QuizRoomParticipant, QuizRoomParticipantDto>()
+               .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+               .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => src.User.ProfileImage));
 
         }
 

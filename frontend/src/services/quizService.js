@@ -117,14 +117,7 @@ export const quizService = {
     }
   },
 
-  async getQuizResult(attemptId) {
-    try {
-      const response = await httpClient.get(`/quizzes/attempts/${attemptId}/result`)
-        return ApiResponse.fromApiResponse(response)
-    } catch (error) {
-       return ApiResponse.error(error.message)
-    }
-  },
+ 
 
   async getUserQuizAttempts(userId) {
     try {

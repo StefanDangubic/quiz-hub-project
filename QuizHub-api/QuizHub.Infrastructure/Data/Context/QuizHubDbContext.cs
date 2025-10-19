@@ -24,6 +24,10 @@ namespace QuizHub.Infrastructure.Data.Context
         public DbSet<QuizAttempt> QuizAttempts { get; set; }
         public DbSet<UserAnswer> UserAnswers { get; set; }
 
+        public DbSet<QuizRoom> QuizRooms { get; set; }
+        public DbSet<QuizRoomParticipant> QuizRoomParticipants { get; set; }
+        public DbSet<QuizRoomAnswer> QuizRoomAnswers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -43,6 +47,10 @@ namespace QuizHub.Infrastructure.Data.Context
             modelBuilder.Entity<Question>()
                 .Property(e => e.QuestionType)
                 .HasConversion<int>();
+
+            modelBuilder.Entity<QuizRoom>()
+               .Property(e => e.Status)
+               .HasConversion<int>();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

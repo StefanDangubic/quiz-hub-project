@@ -49,7 +49,7 @@ const QuizProgressChart = ({ quizId, quizTitle }) => {
   if (!progressData || progressData.attempts.length <= 1) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-500">The progress chart will be available after multiple attempts</p>
+        {/* <p className="text-gray-500">The progress chart will be available after multiple attempts</p> */}
       </div>
     );
   }

@@ -24,7 +24,9 @@ import QuizResultPage from './pages/QuizResultPage';
 import MyResultsPage from './pages/MyResultsPage';
 import AdminResultsPage from "./pages/AdminResultsPage"
 import SmartRedirect from "./components/auth/SmartRedirect"
-
+import QuizRoomsPage from "./pages/QuizRoomsPage"
+import QuizRoomLobbyPage from "./pages/QuizRoomLobbyPage"
+import LiveQuizPage from "./pages/LiveQuizPage"
 
 function AuthInitializer() {
   const dispatch = useDispatch()
@@ -108,6 +110,33 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+              path="/quiz-rooms"
+              element={
+                <ProtectedRoute>
+                  <QuizRoomsPage />
+                </ProtectedRoute>
+              }
+            />
+
+             <Route
+              path="/quiz-rooms/:roomCode/lobby"
+              element={
+                <ProtectedRoute>
+                  <QuizRoomLobbyPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/quiz-rooms/:roomCode/live"
+              element={
+                <ProtectedRoute>
+                  <LiveQuizPage />
+                </ProtectedRoute>
+              }
+            />
 
 
              

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizHub.Infrastructure.Data.Context;
 
@@ -11,9 +12,11 @@ using QuizHub.Infrastructure.Data.Context;
 namespace QuizHub.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizHubDbContext))]
-    partial class QuizHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251018095238_AddIsRoomCreatorAndSelectedAnswerIdsColumns")]
+    partial class AddIsRoomCreatorAndSelectedAnswerIdsColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

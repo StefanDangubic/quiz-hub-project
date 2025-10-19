@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizHub.Infrastructure.Data.Context;
 
@@ -11,9 +12,11 @@ using QuizHub.Infrastructure.Data.Context;
 namespace QuizHub.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizHubDbContext))]
-    partial class QuizHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251005150021_CreateQuizRoomTables")]
+    partial class CreateQuizRoomTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,10 +324,6 @@ namespace QuizHub.Infrastructure.Migrations
                     b.Property<int?>("SelectedAnswerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SelectedAnswerIds")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("TextAnswer")
                         .HasColumnType("nvarchar(max)");
 
@@ -364,9 +363,6 @@ namespace QuizHub.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsConnected")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRoomCreator")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinedAt")

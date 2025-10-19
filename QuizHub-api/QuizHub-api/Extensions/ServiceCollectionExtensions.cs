@@ -44,6 +44,7 @@ namespace QuizHub_api.Extensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IQuizAttemptRepository, QuizAttemptRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IQuizRoomRepository, QuizRoomRepository>();
 
 
             // Services
@@ -55,7 +56,8 @@ namespace QuizHub_api.Extensions
             services.AddScoped<IQuizService, QuizService>();
             services.AddScoped<ILeaderboardService, LeaderboardService>();
             services.AddScoped<IAdminService, AdminService>();
-
+            services.AddScoped<IQuizRoomService, QuizRoomService>();
+            services.AddScoped<IQuizRoomLiveService, QuizRoomLiveService>();
 
             return services;
         }
@@ -82,6 +84,22 @@ namespace QuizHub_api.Extensions
                     ValidAudience = jwtSettings["Audience"],
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
