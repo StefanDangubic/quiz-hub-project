@@ -67,10 +67,10 @@ KvizHub/
 ### Backend setup
 
 1. **Kloniraj repozitorijum**
-    ```bash
-   git clone <repository-url>
-   cd quiz-hub-project
-   ```
+ ```bash
+ git clone <repository-url>
+ cd quiz-hub-project
+ ```
 
 ### 📌 Kreiranje konfiguracije
 
@@ -98,17 +98,17 @@ i ubaci sledeće:
     "ExpirationInMinutes": 60
   },
   "DefaultAdmin": {
-    "Username": "admin",
-    "Email": "admin@example.com",
-    "Password": "admin123"
+    "Username": "YOUR_ADMIN_USERNAME",
+    "Email": "YOUR_ADMIN_EMAIL",
+    "Password": "YOUR_ADMIN_PASSWORD"
   },
   "Cloudinary": {
     "CloudName": "YOUR_CLOUD_NAME",
-    "ApiKey": "YOUR_API_KEY",
-    "ApiSecret": "YOUR_API_SECRET"
+    "ApiKey": "YOUR_CLOUDINARY_API_KEY",
+    "ApiSecret": "YOUR_CLOUDINARY_API_SECRET"
   },
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=quizhubdb;Trusted_Connection=True;Encrypt=False"
+    "DefaultConnection": "YOUR_CONNECTION_STRING"
   },
   "AllowedHosts": "*"
 }
@@ -116,31 +116,31 @@ i ubaci sledeće:
 
 ---
 ### 📦 Instalacija dependencies
-
+ ```bash
 cd QuizHub-api
 dotnet restore
-
+```
 ---
 
 
 3. **Pokreni migracije**
-   ```bash
-   dotnet ef database update
-   ```
+```bash
+dotnet ef database update
+```
 
 4. **Pokreni backend**
-   ```bash
-   dotnet run
-   ```
-   Backend će biti dostupan na `https://localhost:7244`
+```bash
+dotnet run
+```
+Backend će biti dostupan na `https://localhost:7244`
 
 ### Frontend setup
 
 1. **Instaliraj dependencies**
-   ```bash
-   cd frontend
-   npm install
-   ```
+```bash
+cd frontend
+npm install
+ ```
 ### ⚙️ Environment (.env)
 
 U frontend folderu napravi .env:
@@ -152,10 +152,10 @@ VITE_APP_NAME=KvizHub
 ---
 
 2. **Pokreni frontend**
-   ```bash
-   npm run dev
-   ```
-   Frontend će biti dostupan na `http://localhost:5173`
+```bash
+npm run dev
+```
+Frontend će biti dostupan na `http://localhost:5173`
 
 ## 📊 Baza podataka
 
@@ -178,35 +178,7 @@ Aplikacija koristi JWT (JSON Web Token) autentifikaciju:
 
 Aplikacija koristi moderni, responzivni dizajn sa:
 - **Tailwind CSS** za stilizovanje
-- **Mobile-first** pristup
 - **Accessibility** standardi
 - **Smooth animations** i tranzicije
-
-## 🔧 Konfiguracija
-
-### appsettings.json (Backend)
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": ""
-  },
-  "JwtSettings": {
-    "SecretKey": "your-secret-key",
-    "Issuer": "KvizHub",
-    "Audience": "KvizHub-Users"
-  }
-},
- "DefaultAdmin": {
-   "Username": "",
-   "Email": "",
-   "Password": ""
- }
-
-```
-
-### Environment varijable (Frontend)
-```env
-REACT_APP_API_URL=https://localhost:7244/api
-```
 
 
