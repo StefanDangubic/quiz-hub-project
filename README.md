@@ -69,16 +69,62 @@ KvizHub/
 1. **Kloniraj repozitorijum**
     ```bash
    git clone <repository-url>
-   cd QuizHub
+   cd quiz-hub-project
    ```
 
-2. **Podesi connection string**
-   - Otvori `QuizHub-api/appsettings.json`
-   - Promeni `DefaultConnection` da pokazuje na tvoju SQL Server instancu
+### 📌 Kreiranje konfiguracije
+
+U folderu:
+
+QuizHub-api/QuizHub-api/
+
+napravi fajl:
+
+appsettings.json
+
+i ubaci sledeće:
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "JwtSettings": {
+    "SecretKey": "YOUR_SECRET_KEY",
+    "Issuer": "KvizHub",
+    "Audience": "KvizHub-Users",
+    "ExpirationInMinutes": 60
+  },
+  "DefaultAdmin": {
+    "Username": "admin",
+    "Email": "admin@example.com",
+    "Password": "admin123"
+  },
+  "Cloudinary": {
+    "CloudName": "YOUR_CLOUD_NAME",
+    "ApiKey": "YOUR_API_KEY",
+    "ApiSecret": "YOUR_API_SECRET"
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=quizhubdb;Trusted_Connection=True;Encrypt=False"
+  },
+  "AllowedHosts": "*"
+}
+```
+
+---
+### 📦 Instalacija dependencies
+
+cd QuizHub-api
+dotnet restore
+
+---
+
 
 3. **Pokreni migracije**
    ```bash
-   cd QuizHub-api
    dotnet ef database update
    ```
 
@@ -95,6 +141,15 @@ KvizHub/
    cd frontend
    npm install
    ```
+### ⚙️ Environment (.env)
+
+U frontend folderu napravi .env:
+```env
+VITE_API_BASE_URL=https://localhost:7244/api
+VITE_API_URL=https://localhost:7244
+VITE_APP_NAME=KvizHub
+```
+---
 
 2. **Pokreni frontend**
    ```bash
