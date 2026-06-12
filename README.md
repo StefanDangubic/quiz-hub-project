@@ -105,12 +105,18 @@ Inside `QuizHub-api/QuizHub-api/`, create a file named `appsettings.json`:
     "Email": "YOUR_ADMIN_EMAIL",
     "Password": "YOUR_ADMIN_PASSWORD"
   },
+  "Cloudinary": {
+    "CloudName": "YOUR_CLOUD_NAME",
+    "ApiKey": "YOUR_CLOUDINARY_API_KEY",
+    "ApiSecret": "YOUR_CLOUDINARY_API_SECRET"
+  },
   "ConnectionStrings": {
     "DefaultConnection": "YOUR_CONNECTION_STRING"
   },
   "AllowedHosts": "*"
 }
 ```
+> ℹ️ **Cloudinary is optional.** It's only used for profile picture uploads. If you don't configure it, the rest of the app will work fine — just leave the placeholder values or an empty string, and skip the profile picture feature.
 
 **3. Install dependencies**
  ```bash
@@ -119,15 +125,24 @@ dotnet restore
 ```
 
 **4. Apply database migrations**
+
+> Note: `dotnet ef` commands must be run from the folder containing the `.csproj` file (`QuizHub-api/QuizHub-api`).
+
 ```bash
+cd QuizHub-api
 dotnet ef database update
+```
+
+If `dotnet ef` is not found, install the tool globally:
+```bash
+dotnet tool install --global dotnet-ef
 ```
 
 **5. Run the backend**
 ```bash
 dotnet run
 ```
-The API will be available at `https://localhost:7244`
+The backend will be available at `https://localhost:7244`
 
 ---
  
@@ -153,7 +168,7 @@ VITE_APP_NAME=KvizHub
 ```bash
 npm run dev
 ```
-The app will be available at `http://localhost:5173`
+The frontend will be available at `http://localhost:5173`
 
 ---
  
@@ -177,12 +192,4 @@ The application uses SQL Server with the following main tables:
 - JWT tokens stored in `localStorage`
 - Automatic session refresh
 - Role-based access control: **User** / **Admin**
----
-
-## 🎨 UI/UX
- 
-- Fully responsive design with **Tailwind CSS**
-- Accessibility standards
-- Smooth animations and transitions
-
 
