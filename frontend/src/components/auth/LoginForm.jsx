@@ -19,12 +19,7 @@ export default function LoginForm() {
     formState: { errors }
   } = useForm();
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigate('/dashboard');
-  //   }
-  // }, [isAuthenticated, navigate]);
-
+ 
   useEffect(() => {
     if (error) {
       toast.error(error);

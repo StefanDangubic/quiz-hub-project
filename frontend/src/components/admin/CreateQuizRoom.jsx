@@ -47,7 +47,7 @@ export default function CreateQuizRoom({ onRoomCreated, onCancel }) {
       const createDto = {
         name: formData.name,
         quizId: Number.parseInt(formData.quizId),
-        maxParticipants: Number.parseInt(formData.maxParticipants),
+      //  maxParticipants: Number.parseInt(formData.maxParticipants),
         scheduledStartTime: new Date(formData.scheduledStartTime).toISOString(),
       }
 
@@ -105,7 +105,7 @@ export default function CreateQuizRoom({ onRoomCreated, onCancel }) {
           </select>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Maximum Participants</label>
             <input
@@ -120,7 +120,7 @@ export default function CreateQuizRoom({ onRoomCreated, onCancel }) {
             />
           </div>
 
-        </div>
+        </div> */}
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Scheduled Start Time</label>

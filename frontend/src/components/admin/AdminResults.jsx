@@ -90,16 +90,7 @@ const AdminResultsPage = () => {
     return "text-red-600 bg-red-100"
   }
 
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen bg-gray-50">
-//         <Header />
-//         <div className="flex items-center justify-center min-h-64">
-//           <div className="animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 h-8 w-8"></div>
-//         </div>
-//       </div>
-//     )
-//   }
+
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -26,7 +26,6 @@ const GlobalLeaderboard = () => {
   const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    // Load available quizzes for filter
     dispatch(fetchQuizzesForFilter())
   }, [dispatch])
 
@@ -40,7 +39,7 @@ const GlobalLeaderboard = () => {
         }),
       )
 
-      // Load user position if user is logged in
+      
       if (user) {
         dispatch(
           fetchUserPosition({
@@ -141,14 +140,8 @@ const GlobalLeaderboard = () => {
                   <span className="text-2xl font-bold text-blue-600">{getRankIcon(userPosition)}</span>
                   <div>
                     <p className="font-medium text-gray-900">{user?.username}</p>
-                    {/* <p className="text-sm text-gray-600">{userPosition.totalScore} points</p> */}
                   </div>
                 </div>
-                {/* <div className="text-right">
-                  <p className="text-sm text-gray-600">
-                    Position: {userPosition.position} of {totalCount}
-                  </p>
-                </div> */}
               </div>
             </div>
           )}
