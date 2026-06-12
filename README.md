@@ -2,6 +2,12 @@
 
 QuizHub is a modern web application for creating and solving quizzes, built with a **.NET 8** Web API backend and a **React** frontend. It features real-time multiplayer capabilities powered by **SignalR**.
 
+---
+### Admin Dashboard
+![Admin Dashboard](docs/screenshots/admin_dashboard.png)
+ 
+---
+
 ## 🚀 Features
 
 ### For Users
@@ -118,13 +124,8 @@ Inside `QuizHub-api/QuizHub-api/`, create a file named `appsettings.json`:
 ```
 > ℹ️ **Cloudinary is optional.** It's only used for profile picture uploads. If you don't configure it, the rest of the app will work fine — just leave the placeholder values or an empty string, and skip the profile picture feature.
 
-**3. Install dependencies**
- ```bash
-cd QuizHub-api
-dotnet restore
-```
 
-**4. Apply database migrations**
+**3. Apply database migrations**
 
 > Note: `dotnet ef` commands must be run from the folder containing the `.csproj` file (`QuizHub-api/QuizHub-api`).
 
@@ -138,7 +139,7 @@ If `dotnet ef` is not found, install the tool globally:
 dotnet tool install --global dotnet-ef
 ```
 
-**5. Run the backend**
+**4. Run the backend**
 ```bash
 dotnet run
 ```
